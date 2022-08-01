@@ -5,6 +5,8 @@ export interface IUser {
 	avatar: string;
 	refresh_token: string;
 	mode: string;
+	isCheckPassword: (password: String) => Promise<Boolean>;
+	_doc: Omit<this, "_doc">;
 }
 
 export interface IBook {
@@ -17,4 +19,10 @@ export interface IBook {
 	description: string;
 	status_book: number;
 	user_id: string;
+}
+
+export interface IRequestBodyAuth {
+	name?: String;
+	email: String;
+	password: String;
 }

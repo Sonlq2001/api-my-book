@@ -1,3 +1,5 @@
+import { Router } from "express";
+
 import AuthRoute from "./auth.routes";
 
-export const routes = [AuthRoute];
+export const routes: Router[] = [AuthRoute];
