@@ -28,3 +28,12 @@ export const validateUserLogin = (data: IRequestBodyAuth) => {
 
 	return schema.validate(data);
 };
+
+export const validateBook = (data: any) => {
+	// todo validate book
+	const schema = Joi.object({
+		name: Joi.string().required()
+	});
+
+	return schema.validate(data);
+}
