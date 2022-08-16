@@ -2,6 +2,13 @@ import mongoose from "mongoose";
 
 import { IBook } from "../types/modelTypes";
 
+const childTextNote = new mongoose.Schema(
+  {
+    note: String,
+  },
+  { timestamps: true }
+);
+
 const schema = new mongoose.Schema(
   {
     name: {
@@ -23,7 +30,7 @@ const schema = new mongoose.Schema(
       type: Date || String,
     },
     text_notes: {
-      type: Array,
+      type: [childTextNote],
       default: [],
     },
     description: {

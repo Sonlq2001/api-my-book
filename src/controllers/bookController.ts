@@ -3,6 +3,7 @@ import createError from "http-errors";
 
 import { validateBook } from "../helpers/validation";
 import Book from "../models/bookModel";
+import { pagination } from "../helpers/app-helpers";
 
 export const createBook = async (
   req: Request,
@@ -30,9 +31,14 @@ export const getBookPendingOrDone = async (
   next: NextFunction
 ) => {
   try {
+    const { perPage, skip } = pagination(req);
     const type = req.query.type;
-    const listBook = await Book.find({ status: type });
-    return res.status(200).json({ listBook });
+    const listBook = await Book.find({ status: type })
+      .limit(perPage)
+      .skip(skip);
+    const total = await Book.find({ status: type }).count();
+
+    return res.status(200).json({ listBook, total });
   } catch (error: any) {
     return next(new createError.InternalServerError(error.message));
   }
@@ -97,6 +103,40 @@ export const getBookBeingRead = async (
 
     const bookBeingRead = await Book.findOne({ status: req.query.type });
     return res.status(200).json({ bookBeingRead });
+  } catch (error: any) {
+    return next(new createError.InternalServerError(error.message));
+  }
+};
+
+export const updateNoteBook = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const updatedNote = await Book.findOneAndUpdate(
+      { status: 2 },
+      { $push: { text_notes: req.body } },
+      { new: true }
+    );
+    return res.status(200).json({ book: updatedNote });
+  } catch (error: any) {
+    return next(new createError.InternalServerError(error.message));
+  }
+};
+
+export const updateBookDone = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const bookDone = await Book.findOneAndUpdate(
+      { status: 2 },
+      { status: 4 },
+      { new: true }
+    );
+    return res.status(200).json({ book: bookDone });
   } catch (error: any) {
     return next(new createError.InternalServerError(error.message));
   }

@@ -6,6 +6,8 @@ import {
   updateScheduleBook,
   getBook,
   getBookBeingRead,
+  updateNoteBook,
+  updateBookDone,
 } from "../controllers/bookController";
 
 const route = express.Router();
@@ -19,5 +21,9 @@ route.patch("/schedule-book/:id", updateScheduleBook);
 route.get("/book/:id", getBook);
 
 route.get("/book-being", getBookBeingRead);
+
+route.patch("/note-book", updateNoteBook);
+
+route.patch("/book-done", updateBookDone);
 
 export default route;
