@@ -17,7 +17,7 @@ export interface IBook {
 	end_time: Date | string;
 	text_notes: string[];
 	description: string;
-	status_book: number;
+	status: number;
 	user_id: string;
 }
 
