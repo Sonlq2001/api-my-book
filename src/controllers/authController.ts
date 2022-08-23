@@ -69,7 +69,7 @@ export const login = async (
     });
 
     res.status(200).json({
-      user: { ...user._doc, password: undefined },
+      user: { ...user._doc, password: undefined, refresh_token: undefined },
       token,
     });
   } catch (error: any) {
