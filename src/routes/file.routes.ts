@@ -4,6 +4,7 @@ import path from "path";
 import createError from "http-errors";
 
 import { uploadFileDiver } from "../controllers/fileController";
+import { verifyToken } from "../middleware/verify-token";
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,6 +27,11 @@ const upload = multer({
 
 const route = express.Router();
 
-route.post("/upload-image", upload.single("file"), uploadFileDiver);
+route.post(
+  "/upload-image",
+  verifyToken,
+  upload.single("file"),
+  uploadFileDiver
+);
 
 export default route;
