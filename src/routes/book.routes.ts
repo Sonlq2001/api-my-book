@@ -1,14 +1,15 @@
 import express from "express";
 
 import {
-  createBook,
-  getBookPendingOrDone,
-  updateScheduleBook,
-  getBook,
-  getBookBeingRead,
-  updateNoteBook,
-  updateBookDone,
-  getBookCheckBeing,
+	createBook,
+	getBookPendingOrDone,
+	updateScheduleBook,
+	getBook,
+	getBookBeingRead,
+	updateNoteBook,
+	updateBookDone,
+	getBookCheckBeing,
+	getTimeLineBook,
 } from "../controllers/bookController";
 import { verifyToken } from "../middleware/verify-token";
 
@@ -29,5 +30,7 @@ route.patch("/note-book", verifyToken, updateNoteBook);
 route.patch("/book-done", verifyToken, updateBookDone);
 
 route.get("/book-check-being", verifyToken, getBookCheckBeing);
+
+route.get("/timeline-book/:id", getTimeLineBook);
 
 export default route;
