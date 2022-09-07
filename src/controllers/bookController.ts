@@ -1,9 +1,11 @@
 import { Response, Request, NextFunction } from "express";
 import createError from "http-errors";
+import mongoose from "mongoose";
 
 import { validateBook } from "../helpers/validation";
 import Book from "../models/bookModel";
 import { pagination } from "../helpers/app-helpers";
+import { STATUS_BOOK } from "../constants/app-constants";
 
 export const createBook = async (
 	req: Request,
@@ -32,10 +34,12 @@ export const getBookPendingOrDone = async (
 ) => {
 	try {
 		const { perPage, skip } = pagination(req);
-		const type = req.query.type;
+		const { type, sort } = req.query;
+		const sorting = sort || "-createdAt";
 		const listBook = await Book.find({ status: type })
 			.limit(perPage)
-			.skip(skip);
+			.skip(skip)
+			.sort(sorting as string);
 		const total = await Book.find({ status: type }).count();
 
 		return res.status(200).json({ listBook, total });
@@ -54,7 +58,11 @@ export const updateScheduleBook = async (
 			status: req.body.status,
 		});
 
-		if (isBeingReadOrAwait?.status === 2 || isBeingReadOrAwait?.status === 3) {
+		const isStatusBook = isBeingReadOrAwait?.status;
+		if (
+			isStatusBook === STATUS_BOOK.START ||
+			isStatusBook === STATUS_BOOK.AWAIT
+		) {
 			throw new createError.BadRequest("You still have 1 book waiting to read");
 		}
 
@@ -126,9 +134,10 @@ export const updateBookDone = async (
 	next: NextFunction
 ) => {
 	try {
+		const { current_type, desire, ...rest } = req.body;
 		const bookDone = await Book.findOneAndUpdate(
-			{ status: req.body.current_type },
-			{ status: req.body.desire },
+			{ status: current_type },
+			{ ...rest, status: desire },
 			{ new: true }
 		);
 		return res.status(200).json({ book: bookDone });
@@ -145,6 +154,19 @@ export const getBookCheckBeing = async (
 	try {
 		const isBookBeing = await Book.findOne({ status: 2 });
 		return res.status(200).json({ isBookBeing: Boolean(isBookBeing) });
+	} catch (error: any) {
+		return next(new createError.InternalServerError(error.message));
+	}
+};
+
+export const getTimeLineBook = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const bookTimeLine = await Book.findOne({ _id: req.params.id });
+		return res.status(200).json({ bookTimeLine });
 	} catch (error: any) {
 		return next(new createError.InternalServerError(error.message));
 	}
