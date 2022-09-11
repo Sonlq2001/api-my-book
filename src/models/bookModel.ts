@@ -4,10 +4,18 @@ import { IBook } from "../types/modelTypes";
 
 const childTextNote = new mongoose.Schema(
 	{
-		note: String,
+		note: {
+			type: String,
+			required: true,
+		},
 	},
 	{ timestamps: true }
 );
+
+const imageBookDef = new mongoose.Schema({
+	url: String,
+	public_id: String,
+});
 
 const schema = new mongoose.Schema(
 	{
@@ -19,10 +27,7 @@ const schema = new mongoose.Schema(
 			type: Number,
 			required: true,
 		},
-		image_book: {
-			type: String,
-			required: true,
-		},
+		image_book: imageBookDef,
 		start_time: {
 			type: Date || String,
 		},
