@@ -1,8 +1,8 @@
 import express, {
-  Request,
-  Response,
-  NextFunction,
-  ErrorRequestHandler,
+	Request,
+	Response,
+	NextFunction,
+	ErrorRequestHandler,
 } from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -17,10 +17,10 @@ const app = express();
 
 // middleware
 app.use(
-  cors({
-    origin: "http://localhost:8080",
-    credentials: true,
-  })
+	cors({
+		origin: "http://localhost:8080",
+		credentials: true,
+	})
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,17 +31,23 @@ db.connect();
 
 // Routes
 app.use("/api", routes);
+app.get("/", (req, res) => {
+	res.json({
+		message: "Welcome, Books Son has read",
+		website: "https://blog-dev-api.herokuapp.com/api/home/blogs",
+	});
+});
 
 // handle error
 app.use((req: Request, res: Response, next: NextFunction) => {
-  next(new createError.NotFound("This route does not exits"));
+	next(new createError.NotFound("This route does not exits"));
 });
 
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  res.status(err.status || 500).json({
-    status: err.status || 500,
-    message: err.message,
-  });
+	res.status(err.status || 500).json({
+		status: err.status || 500,
+		message: err.message,
+	});
 };
 
 app.use(errorHandler);
@@ -50,5 +56,5 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`server running ${PORT}`);
+	console.log(`server running ${PORT}`);
 });
