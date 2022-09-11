@@ -6,7 +6,8 @@
 	"scripts": {
 		"start": "node dist/index.js",
 		"dev": "ts-node-dev src/index.ts",
-		"build": "tsc"
+		"build": "tsc",
+		"heroku-postbuild": "tsc"
 	},
 	"dependencies": {
 		"@types/multer": "^1.4.7",
