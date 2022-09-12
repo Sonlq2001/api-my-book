@@ -34,7 +34,7 @@ app.use("/api", routes);
 app.get("/", (req, res) => {
 	res.json({
 		message: "Welcome, Books Son has read",
-		website: "https://blog-dev-api.herokuapp.com/api/home/blogs",
+		api: "https://api-my-book.herokuapp.com/api",
 	});
 });
 
