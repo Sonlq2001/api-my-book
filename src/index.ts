@@ -18,8 +18,9 @@ const app = express();
 // middleware
 app.use(
 	cors({
-		origin: "http://localhost:8080",
+		origin: ["http://localhost:8080", "https://api-my-book.herokuapp.com/api"],
 		credentials: true,
+		preflightContinue: false,
 	})
 );
 app.use(express.json());
