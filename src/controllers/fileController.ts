@@ -27,6 +27,7 @@ export const uploadFileCloudinary = async (
 		}
 		const resCloudinary = await cloudinary.v2.uploader.upload(req.file.path, {
 			folder: "my-book",
+			upload_preset: "ml_default",
 		});
 		removeFileUpload(req.file.path);
 		return res.status(200).json({
