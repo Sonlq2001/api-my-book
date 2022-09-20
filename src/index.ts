@@ -21,7 +21,7 @@ app.use(
 		origin: [
 			"http://localhost:8080",
 			"https://api-my-book.herokuapp.com/api",
-			"https://monumental-biscochitos-53339c.netlify.app/",
+			"https://my-bookk.netlify.app",
 		],
 		credentials: true,
 		preflightContinue: false,
@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 	res.json({
 		message: "Welcome, Books Son has read",
 		api: "https://api-my-book.herokuapp.com/api",
-		website: "https://api-my-book.herokuapp.com/api",
+		website: "https://my-bookk.netlify.app",
 	});
 });
 
