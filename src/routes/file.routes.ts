@@ -4,7 +4,7 @@ import path from "path";
 import createError from "http-errors";
 
 import { uploadFileCloudinary } from "../controllers/fileController";
-// import { verifyToken } from "../middleware/verify-token";
+import { verifyToken } from "../middleware/verify-token";
 
 const storage = multer.diskStorage({
 	destination: function (req, file, cb) {
@@ -29,7 +29,7 @@ const route = express.Router();
 
 route.post(
 	"/upload-image",
-	// verifyToken,
+	verifyToken,
 	upload.single("file"),
 	uploadFileCloudinary
 );

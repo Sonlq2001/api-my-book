@@ -34,13 +34,20 @@ export const getBookPendingOrDone = async (
 ) => {
 	try {
 		const { perPage, skip } = pagination(req);
-		const { type, sort } = req.query;
+		const { type, sort, search } = req.query;
 		const sorting = sort || "-createdAt";
-		const listBook = await Book.find({ status: type })
+
+		const queryFind = {
+			status: type,
+			name: { $regex: search?.toString().trim().toLowerCase() || "" },
+		};
+
+		const listBook = await Book.find(queryFind)
 			.limit(perPage)
 			.skip(skip)
 			.sort(sorting as string);
-		const total = await Book.find({ status: type }).count();
+
+		const total = await Book.find(queryFind).count();
 
 		return res.status(200).json({ listBook, total });
 	} catch (error: any) {
@@ -100,7 +107,10 @@ export const getBookBeingRead = async (
 	next: NextFunction
 ) => {
 	try {
-		if (Number(req.query.type) !== 2 && Number(req.query.type) !== 3) {
+		if (
+			Number(req.query.type) !== STATUS_BOOK.START &&
+			Number(req.query.type) !== STATUS_BOOK.AWAIT
+		) {
 			throw new createError.InternalServerError("Type not valid");
 		}
 
@@ -118,7 +128,7 @@ export const updateNoteBook = async (
 ) => {
 	try {
 		const updatedNote = await Book.findOneAndUpdate(
-			{ status: 2 },
+			{ status: STATUS_BOOK.START },
 			{ $push: { text_notes: req.body } },
 			{ new: true }
 		);
